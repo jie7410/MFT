@@ -1,0 +1,56 @@
+result_dir: ./result/fineFrozen
+
+# feeder
+feeder: feeders.feeder_ntu.Feeder
+train_feeder_args:
+  data_path: /your_data_path/NTU60_XSub.npz
+  split: train
+  debug: False
+  simpling: global_crop
+  window_size: 120
+  normalization: False
+  random_rot: True
+  p_interval: [0.5, 1]
+  vel: False
+  bone: False
+
+test_feeder_args:
+  data_path: /your_data_path/NTU60_XSub.npz
+  split: test  
+  debug: False
+  simpling: global_crop
+  window_size: 120
+  p_interval: [0.95]
+  vel: False
+  bone: False
+
+model: model.Model.Model
+model_args:
+  in_channels: 3 
+  num_frames: 120 
+  num_joints: 25 
+  temporal_patch: 6
+  embed_dim_ratio: 256 
+  en_depth: 7
+  num_labels: 60
+  mode: fine
+  pre_depth: 1 
+  head_type: stsv4   # [st sts sst global sstglobal]
+
+frozen: True
+pretrain_weights: ./result/pretrain/weight_150.pth
+
+
+# training
+device: 0
+train_size: 16
+val_size: 32
+
+
+optimizer: AdamW
+base_lr: 0.0004
+weight_decay: 0.1
+
+lr_decay_rate: 0.1
+epochs: 150
+
